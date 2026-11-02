@@ -7,6 +7,9 @@ param image string
 @description('Region for the database. Spain Central does not offer the Azure SQL free limit.')
 param sqlLocation string = 'francecentral'
 
+@description('Region for the database. The free offer is not available in every region.')
+param sqlLocation string
+
 @description('Entra object ID of the database administrator.')
 param sqlAdminObjectId string
 

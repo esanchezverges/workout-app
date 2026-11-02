@@ -42,6 +42,7 @@ jobs:
             --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
             --template-file infra/main.bicep \
             --parameters image="$IMAGE" location="${{ vars.AZURE_LOCATION }}" \
+              sqlLocation="${{ vars.AZURE_SQL_LOCATION }}" \
               sqlAdminObjectId="${{ vars.AZURE_SQL_ADMIN_ID }}" sqlAdminLogin="${{ vars.AZURE_SQL_ADMIN_LOGIN }}" \
             --query properties.outputs.url.value --output tsv
       - name: Run database migrations
