@@ -42,4 +42,19 @@ jobs:
             --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
             --template-file infra/main.bicep \
             --parameters image="$IMAGE" location="${{ vars.AZURE_LOCATION }}" \
+              sqlAdminObjectId="${{ vars.AZURE_SQL_ADMIN_ID }}" sqlAdminLogin="${{ vars.AZURE_SQL_ADMIN_LOGIN }}" \
             --query properties.outputs.url.value --output tsv
+      - name: Run database migrations
+        run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          group="${{ vars.AZURE_RESOURCE_GROUP }}"
+          execution=$(az containerapp job start -n workout-migrate -g "$group" --query name -o tsv)
+          for _ in $(seq 1 60); do
+            status=$(az containerapp job execution show -n workout-migrate -g "$group" \
+              --job-execution-name "$execution" --query properties.status -o tsv)
+            echo "$execution: $status"
+            [ "$status" = Succeeded ] && exit 0
+            [ "$status" = Failed ] && exit 1
+            sleep 10
+          done
+          echo "Timed out waiting for migrations" && exit 1

@@ -1,0 +1,38 @@
+# Local only. Azure uses Entra identities and has no password.
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: Local_Dev_Passw0rd!
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$$MSSQL_SA_PASSWORD" -Q "SELECT 1" -b
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  migrate:
+    build: .
+    command: ["--migrate"]
+    environment: &app-env
+      ConnectionStrings__Workout: Server=db,1433;Database=workout;User Id=sa;Password=Local_Dev_Passw0rd!;TrustServerCertificate=True
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build: .
+    environment: *app-env
+    ports:
+      - "8080:8080"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  db-data:

@@ -17,16 +17,16 @@ namespace Workout.Api.Migrations
                 name: "Exercises",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    BodyPart = table.Column<string>(type: "TEXT", nullable: false),
-                    Equipment = table.Column<string>(type: "TEXT", nullable: false),
-                    TargetMuscle = table.Column<string>(type: "TEXT", nullable: false),
-                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
-                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true),
-                    SetType = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BodyPart = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Equipment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TargetMuscle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SetType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,10 +37,10 @@ namespace Workout.Api.Migrations
                 name: "Sessions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    Notes = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,17 +51,17 @@ namespace Workout.Api.Migrations
                 name: "LoggedSets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SessionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ExerciseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SetNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    SetType = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    Weight = table.Column<decimal>(type: "TEXT", precision: 7, scale: 2, nullable: true),
-                    Reps = table.Column<int>(type: "INTEGER", nullable: true),
-                    DurationSeconds = table.Column<int>(type: "INTEGER", nullable: true),
-                    RestSeconds = table.Column<int>(type: "INTEGER", nullable: true),
-                    Notes = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SessionId = table.Column<int>(type: "int", nullable: false),
+                    ExerciseId = table.Column<int>(type: "int", nullable: false),
+                    SetNumber = table.Column<int>(type: "int", nullable: false),
+                    SetType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(7,2)", precision: 7, scale: 2, nullable: true),
+                    Reps = table.Column<int>(type: "int", nullable: true),
+                    DurationSeconds = table.Column<int>(type: "int", nullable: true),
+                    RestSeconds = table.Column<int>(type: "int", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {

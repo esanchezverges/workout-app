@@ -16,9 +16,6 @@ RUN dotnet publish src/Workout.Api/Workout.Api.csproj -c Release --no-restore -o
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=api /publish .
-# Container storage: wiped on scale-to-zero or redeploy. Demo data only.
-RUN mkdir /data && chown "$APP_UID" /data
-ENV ConnectionStrings__Workout="Data Source=/data/workout.db"
 USER $APP_UID
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "Workout.Api.dll"]
