@@ -7,9 +7,6 @@ param image string
 @description('Region for the database. Spain Central does not offer the Azure SQL free limit.')
 param sqlLocation string = 'francecentral'
 
-@description('Region for the database. The free offer is not available in every region.')
-param sqlLocation string
-
 @description('Entra object ID of the database administrator.')
 param sqlAdminObjectId string
 
@@ -59,7 +56,6 @@ resource database 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     // Free offer: when the monthly allowance runs out the database pauses instead of billing.
     useFreeLimit: true
     freeLimitExhaustionBehavior: 'AutoPause'
-    autoPauseDelay: 15
     minCapacity: json('0.5')
     maxSizeBytes: 34359738368
     requestedBackupStorageRedundancy: 'Local'
