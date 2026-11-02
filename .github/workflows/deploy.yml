@@ -41,5 +41,5 @@ jobs:
           az deployment group create \
             --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
             --template-file infra/main.bicep \
-            --parameters image="$IMAGE" \
+            --parameters image="$IMAGE" location="${{ vars.AZURE_LOCATION }}" \
             --query properties.outputs.url.value --output tsv
