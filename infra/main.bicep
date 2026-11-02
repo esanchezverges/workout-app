@@ -4,6 +4,9 @@ param location string = resourceGroup().location
 @description('Full container image reference, for example ghcr.io/owner/workout-app:sha.')
 param image string
 
+@description('Region for the database. Spain Central does not offer the Azure SQL free limit.')
+param sqlLocation string = 'francecentral'
+
 @description('Entra object ID of the database administrator.')
 param sqlAdminObjectId string
 
@@ -17,7 +20,7 @@ resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' 
 
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: 'workout-sql-${uniqueString(resourceGroup().id)}'
-  location: location
+  location: sqlLocation
   properties: {
     minimalTlsVersion: '1.2'
     administrators: {
@@ -44,7 +47,7 @@ resource allowAzureServices 'Microsoft.Sql/servers/firewallRules@2023-08-01-prev
 resource database 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
   parent: sqlServer
   name: 'workout'
-  location: location
+  location: sqlLocation
   sku: {
     name: 'GP_S_Gen5_2'
     tier: 'GeneralPurpose'
