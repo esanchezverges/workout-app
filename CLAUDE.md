@@ -11,6 +11,7 @@ Run after any change, before saying it works:
 - API: `dotnet run --project src/Workout.Api` (http://localhost:5029)
 - Web: `cd web && npm run dev` (proxies `/api` to the API)
 - Container: `docker build -t workout-app . && docker run --rm -p 8080:8080 workout-app`
+- Deploy: run the manual `Deploy` GitHub workflow; `infra/main.bicep` defines the Azure resources.
 
 ## Migrations
 `dotnet ef migrations add <Name> --project src/Workout.Api`. They apply at startup.
