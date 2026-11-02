@@ -30,9 +30,9 @@ public static class ExerciseEndpoints
                 .ToListAsync(ct);
 
             var history = sets
-                .GroupBy(s => s.Session)
-                .OrderByDescending(g => g.Key.Date).ThenByDescending(g => g.Key.Id)
-                .Select(g => new ExerciseHistoryEntryDto(g.Key.Id, g.Key.Date, g.Select(s => s.ToDto()).ToList()));
+                .GroupBy(s => s.SessionId)
+                .Select(g => new ExerciseHistoryEntryDto(g.Key, g.First().Session.Date, g.Select(s => s.ToDto()).ToList()))
+                .OrderByDescending(h => h.Date).ThenByDescending(h => h.SessionId);
 
             return Results.Ok(history);
         });

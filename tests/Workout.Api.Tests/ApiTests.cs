@@ -140,6 +140,19 @@ public class ApiTests : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task History_groups_all_sets_from_a_session_into_one_entry()
+    {
+        const int overheadPress = 4;
+        await Post(Weighted(overheadPress, 50), Weighted(overheadPress, 55));
+
+        var history = (await _client.GetFromJsonAsync<List<ExerciseHistoryEntryDto>>(
+            $"/api/exercises/{overheadPress}/history", Json))!;
+
+        var entry = Assert.Single(history);
+        Assert.Equal([1, 2], entry.Sets.Select(s => s.SetNumber));
+    }
+
+    [Fact]
     public async Task Unknown_ids_and_api_routes_return_404()
     {
         Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync("/api/exercises/9999/history")).StatusCode);
